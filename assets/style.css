@@ -2,6 +2,8 @@
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     color: grey;   
     text-decoration: none; 
+    justify-content: center;
+    align-content: flex-start;
 }
 html, body {
     margin: 0;
@@ -31,9 +33,11 @@ ul{
     list-style: none;
     flex-direction: row;
     width: 100%;
+    padding: 0%;
 }
 li{
     display: flex;
+    justify-content: left;
     flex-grow: 1;
 }
 #timer{
@@ -51,16 +55,36 @@ button{
     border: 2px solid grey;
     border-radius: 10px;
     box-shadow: 2px 2px 4px; 
+    width: 10%;
 }
 
 main{
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
     justify-content: center;
+    width: 100%;
     height: 100%;
     font-size: 150%;
+}
+main p{
+    display: flex;    
+    margin-bottom: 0%;
+    justify-content: center;
+}
+main ul{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 1%;
+    padding: 0%;
+}
+main li{
+    width: 100%;
+    justify-content: center;
+}
+main button{
+    width: 10%;
+    justify-content: center;
 }
 
 @media (max-width: 1000px) {
