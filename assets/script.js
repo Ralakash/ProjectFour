@@ -2,7 +2,21 @@ var timeEl = document.querySelector("#timer");
 var startBTN = document.querySelector("#start");
 var secondsLeft;
 var timerInterval;
+var stopTimer = false;
+var a0 ;
+var a1 ;
+var a2 ;
+var a3 ;
+var questionCounter = 0;
+var score = 0;
+var p1 = document.createElement("p");
+var ul = document.createElement("ul");
+var main = document.querySelector("#main");
+// sets up html document with the previously created elements
+main.appendChild(p1);
+main.appendChild(ul);
 
+// sets objects for each question in the quiz
 var question0 = {
   question: "Inside which HTML element do we put the JavaScript?",
   answer0: ["<scripting>", false],
@@ -31,36 +45,32 @@ var question3 = {
   answer2: ["name = 'Jerry';", true],
   answer3: ["var Jerry = name;", false]
 };
+var questionArray = [question0,question1,question2,question3];
 
-var questionArray = [question]
 
 // Adds function that starts a 30 second timer when the start quiz button is clicked. 
 function timer(){
   clearInterval(timerInterval);
-   secondsLeft = 30;
-  console.log(secondsLeft);
+  secondsLeft = 30;
   timerInterval = setInterval(function() {
-    if(secondsLeft >= 0) {
-      secondsLeft--;
-      timeEl.textContent = secondsLeft + " seconds left";      
-    } else {
-            // Stops execution of action at set interval
-            clearInterval(timerInterval);
-            timeEl.textContent = "Time's Up!!!";
-            // Calls function to create and append image
-    }
-  }, 1000);
+      if(stopTimer == false){
+      if(secondsLeft >= 0) {
+        console.log(secondsLeft);
+        secondsLeft--;
+        timeEl.textContent = secondsLeft + " seconds left";      
+      } else {
+              // Stops execution of action at set interval
+              clearInterval(timerInterval);
+              timeEl.textContent = "Time's Up!!!";
+              // Calls function to create and append image
+      }
+    } else {clearInterval(timerInterval)}
+    }, 1000);
 }
 
 // Set up question on button click and clear the start quiz button.
 function addQuestion(){
   // // sets up the html element to accept the questions and answers
-  var p1 = document.createElement("p");
-  var ul = document.createElement("ul");
-  var main = document.querySelector("#main");
-  p1.textContent = question.question;
-  main.appendChild(p1);
-  main.appendChild(ul);
   // creates a for loop to add 4 buttons and give them unique ID's and append them into the ul.
   for(var i = 0; i <4; i++){
     var li = document.createElement("li");
@@ -69,17 +79,75 @@ function addQuestion(){
     ul.appendChild(li);
     li.appendChild(answerBtn);
   }
-  // creates variables for the 4 buttons
-  var a0 = document.querySelector("#Btn0");
-  var a1 = document.querySelector("#Btn1");
-  var a2 = document.querySelector("#Btn2");
-  var a3 = document.querySelector("#Btn3");
-// calls content to the generated buttons from the object question
- a0.textContent = question.answer0[0];
- a1.textContent = question.answer1[0];
- a2.textContent = question.answer2[0];
- a3.textContent = question.answer3[0];
+  // sets variables for the 4 buttons
+  a0 = document.querySelector("#Btn0");
+  a1 = document.querySelector("#Btn1");
+  a2 = document.querySelector("#Btn2");
+  a3 = document.querySelector("#Btn3");
+  newQuestion();
+  listen();
+}
 
+// creates even listners that only run after the buttons have been created. Also generates a variable that allows calcScore to work.
+const listen = () => {
+a0.addEventListener("click", function(event){
+ var boolean = (a0.getAttribute("answer") == "true")?true:false;
+ calcScore(boolean);
+ newQuestion();
+})
+a1.addEventListener("click", function(event){
+  var boolean = (a1.getAttribute("answer") == "true")?true:false;
+  calcScore(boolean);
+  newQuestion();
+})
+a2.addEventListener("click", function(event){
+  var boolean = (a2.getAttribute("answer") == "true")?true:false;
+  calcScore(boolean);
+  newQuestion();
+})
+a3.addEventListener("click", function(event){
+  var boolean = (a3.getAttribute("answer") == "true")?true:false;
+  calcScore(boolean);
+  newQuestion();
+})
+}
+// sets the text content and attributes of the question and answers based on the value of questionCounter
+const newQuestion = () => {
+  if(questionCounter <4){
+    p1.textContent = questionArray[questionCounter].question;
+    a0.textContent = questionArray[questionCounter].answer0[0];
+    a0.setAttribute("answer", questionArray[questionCounter].answer0[1]);
+    a1.textContent = questionArray[questionCounter].answer1[0];
+    a1.setAttribute("answer", questionArray[questionCounter].answer1[1]);
+    a2.textContent = questionArray[questionCounter].answer2[0];
+    a2.setAttribute("answer", questionArray[questionCounter].answer2[1]);
+    a3.textContent = questionArray[questionCounter].answer3[0];
+    a3.setAttribute("answer", questionArray[questionCounter].answer3[1]);
+    questionCounter++;
+  } else {
+    // stops quiz after all four questions have been answered.
+    displayScore();
+  }
+}
+
+// calculates the score by reading the attribute "answer" and changing the score appropriately.
+function calcScore(boolean){
+  if(boolean == true){
+    score++;
+  } else {
+    secondsLeft = secondsLeft- 5;
+  }
+ console.log(score);
+}
+
+// removes button elements and changes the text content of P1 to display the score 
+const displayScore = () => {
+  stopTimer = true;
+  a0.remove();
+  a1.remove();
+  a2.remove();
+  a3.remove();
+  p1.innerHTML = "Your Score: " + score + "<br> Time Remaining: " + secondsLeft;
 }
 
 //calls functions when start button is clicked
@@ -90,5 +158,5 @@ startBTN.addEventListener("click", function(event){
  timer();
 });
 
-// clear the previous question after being answered and populate the next question, subtract time when questions is answered wrong
+
 
