@@ -12,6 +12,11 @@ var score = 0;
 var p1 = document.createElement("p");
 var ul = document.createElement("ul");
 var main = document.querySelector("#main");
+
+// sets up local storage to display blank information 
+localStorage.setItem("highScoreName", "No Contest");
+localStorage.setItem("highScore", "0");
+localStorage.setItem("highScoreTime", "0");
 // sets up html document with the previously created elements
 main.appendChild(p1);
 main.appendChild(ul);
@@ -61,6 +66,11 @@ function timer(){
       } else {
               // Stops execution of action at set interval
               clearInterval(timerInterval);
+              a0.remove();
+              a1.remove();
+              a2.remove();
+              a3.remove();
+              p1.innerHTML = "Times Up <br> Your Score: " + score + "<br> Time Remaining: " + secondsLeft;
               timeEl.textContent = "Time's Up!!!";
               // Calls function to create and append image
       }
@@ -148,7 +158,26 @@ const displayScore = () => {
   a2.remove();
   a3.remove();
   p1.innerHTML = "Your Score: " + score + "<br> Time Remaining: " + secondsLeft;
+  var highScoreForm = document.createElement("form");
+  var hsText = document.createElement("h2");
+  var hsTextInput = document.createElement("input");
+  var hsSubmit = document.createElement("input");
+  hsSubmit.setAttribute("type", "submit");
+  hsTextInput.setAttribute("type", "text");
+  p1.appendChild(highScoreForm);
+  highScoreForm.appendChild(hsText);
+  highScoreForm.appendChild(hsTextInput);
+  highScoreForm.appendChild(hsSubmit);
+  hsText.textContent = "Please enter your initials to save your score."
+  hsSubmit.addEventListener("click", function(){
+    debugger;
+    var hsName = hsTextInput.value;
+    localStorage.setItem("highScoreName", hsName);
+    localStorage.setItem("highScore", score);
+    localStorage.setItem("highScoreTime", secondsLeft);
+  })
 }
+
 
 //calls functions when start button is clicked
 startBTN.addEventListener("click", function(event){
@@ -158,5 +187,12 @@ startBTN.addEventListener("click", function(event){
  timer();
 });
 
+var viewHighScore = document.querySelector("#highScores");
+viewHighScore.addEventListener("click", function(){
+  var lshsName = localStorage.getItem("highScoreName");
+  var lshs = localStorage.getItem("highScore");
+  var lshsTime = localStorage.getItem("highScoreTime");
+  p1.innerHTML = "High Score:<br>" + lshsName + "<br>" + lshs + "<br>" +lshsTime;
+})
 
 
